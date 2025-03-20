@@ -20,6 +20,7 @@ export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 export ASCEND_TOTAL_MEMORY_GB=64
 export HCCL_CONNECT_TIMEOUT=7200
 export MS_COMPILER_CACHE_ENABLE=1
+export CPU_AFFINITY=0
 '
 
 NET_ENV="
@@ -29,17 +30,15 @@ export HCCL_SOCKET_IFNAME=$RAY_DEVICE
 "
 
 if [ $NODE_NUM -eq 2 ]; then
-	YAML_FILE='/root/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b_w8a8.yaml'
+	YAML_FILE='/usr/local/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b_w8a8.yaml'
 elif [ $NODE_NUM -eq 4 ]; then
-	YAML_FILE='/root/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b.yaml'
+	YAML_FILE='/usr/local/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b.yaml'
 fi
 
 
 # 修改权重类型
 sed -e 's/^load_ckpt_format.*/load_ckpt_format: "'$MODEL_TYPE'"/' -i $YAML_FILE
-if [ "$MODEL_TYPE" = "ckpt" ]; then
-    sed -e 's/^auto_trans_ckpt.*/auto_trans_ckpt: False/' -i $YAML_FILE
-fi
+sed -e 's/^auto_trans_ckpt.*/auto_trans_ckpt: False/' -i $YAML_FILE
 
 YAML_ENV="export MINDFORMERS_MODEL_CONFIG=$YAML_FILE"
 
