@@ -43,7 +43,7 @@ main() {
     fi
 
     # 检测需要部署的节点ip数量
-    if [ [ $NODE_NUM -ne 2 ] && [ $NODE_NUM -ne 4 ] ]; then
+    if [ $NODE_NUM -ne 2 ] && [ $NODE_NUM -ne 4 ]; then
         echo "当前仅支持两/四节点部署,当前数量是$NODE_NUM"
         exit 1
     fi
@@ -58,6 +58,17 @@ main() {
     #进入容器执行
     # 3. 设置容器内环境变量
     docker exec -it $CONTAINER_NAME /workspace/lib/set_env.sh
+
+    # 4. 进行绑核
+    pip list | grep psutil
+    if [ $? -ne 0 ]; then
+        pip install psutil
+    fi
+    python $current_path/lib/fine-grainded-bind.py
+    if [ $? -ne 0 ]; then
+        echo "细粒度线程绑核失败，请确保驱动版本>=24.1.0"
+        exit 1
+    fi
 
 }
 

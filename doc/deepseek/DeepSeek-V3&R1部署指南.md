@@ -99,14 +99,14 @@ sh mindspore-deepseek/workspace/roles/prepare/files/lib/ascend_prepare.sh
 **Step1：下载oedeploy工具（下载到控制节点）**
 
 ```shell
-# 下载插件包并解压
-wget https://repo.oepkgs.net/openEuler/rpm/openEuler-24.03-LTS/contrib/oedp/plugins/mindspore-deepseek.tar.gz
-
-tar zxvf mindspore-deepseek.tar.gz
 # 下载安装oedp工具，例如:
 wget https://repo.oepkgs.net/openEuler/rpm/openEuler-24.03-LTS/contrib/oedp/aarch64/Packages/oedp-1.0.0-2.oe2503.aarch64.rpm
 
 yum localinstall oedp-1.0.0-2.oe2503.aarch64.rpm
+# 下载插件包
+git clone https://gitee.com/openeuler/llm_solution.git
+
+cd llm_solution/script/mindspore-deepseek
 ```
 
 **Step2：调整oedeploy配置文件**
@@ -353,11 +353,11 @@ npu-smi set -t reset -i $id -c $chip_id
 
 该步骤在宿主机执行，需在所有节点执行
 
-**Step1:** 可使用even-iso.py绑核脚本，进行细粒度绑核提升性能
+**Step1:** 可使用fine-grainded-bind.py绑核脚本，进行细粒度绑核提升性能
 
 ```shell
 # 所有节点执行
-python ./lib/even-iso.py
+python ./lib/fine-grainded-bind.py
 ```
 
 
