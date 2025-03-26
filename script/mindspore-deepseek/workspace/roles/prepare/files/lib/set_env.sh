@@ -29,12 +29,20 @@ export TP_SOCKET_IFNAME=$RAY_DEVICE
 export HCCL_SOCKET_IFNAME=$RAY_DEVICE
 "
 
-if [ $NODE_NUM -eq 2 ]; then
-	YAML_FILE='/usr/local/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b_w8a8.yaml'
+if [ $NODE_NUM -eq 1 ]; then
+    YAML_FILE='/usr/local/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b_w8a8.yaml'
+    cat $YAML_FILE | grep gptq-pergroup
+    if [ $? -ne 0 ]; then
+        sed -e 's/model_parallel:.*/model_parallel: 8/' -i $YAML_FILE
+        sed -e "s/quant_method:.*/quant_method: 'gptq-pergroup'/" -i $YAML_FILE
+        sed -e 's/weight_dtype/#weight_dtype/' -i $YAML_FILE
+        sed -e 's/activation_dtype/#activation_dtype/' -i $YAML_FILE
+    fi
+elif [ $NODE_NUM -eq 2 ]; then
+    YAML_FILE='/usr/local/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b_w8a8.yaml'
 elif [ $NODE_NUM -eq 4 ]; then
-	YAML_FILE='/usr/local/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b.yaml'
+    YAML_FILE='/usr/local/Python-3.11/lib/python3.11/site-packages/research/deepseek3/deepseek_r1_671b/predict_deepseek_r1_671b.yaml'
 fi
-
 
 # 修改权重类型
 sed -e 's/^load_ckpt_format.*/load_ckpt_format: "'$MODEL_TYPE'"/' -i $YAML_FILE
@@ -50,7 +58,8 @@ if grep -q "openeuler_deepseek_env_config" /root/.bashrc; then
 fi
 
 echo "$ENV_ARG" >> $ENV_FILE
-echo "$NET_ENV" >> $ENV_FILE
 echo "$YAML_ENV" >> $ENV_FILE
+if [ $NODE_NUM -ne 1 ]; then
+    echo "$NET_ENV" >> $ENV_FILE
+fi
 source $ENV_FILE
-
