@@ -270,39 +270,65 @@ def execute_command(cmd_list):
     except FileNotFoundError as e:
         raise RuntimeError(f"Failed to execute command, because {e}.")
 
-def get_numa_map():
+def get_numa_map(affinity: bool, core_num_per_workqueue: int):
     numa_topo_out = execute_command(["npu-smi", "info", "-t", "topo"]).strip().split("\n")
 
     line_no = 0
     npu_no = 0
     numa_to_npu_map = {}
-    
+    numa_number = 0
+    max_cpu = 0
+
+    numa_node = execute_command("lscpu").strip().split("\n")
+    for val in numa_node:
+        if val.startswith("CPU(s):"):
+            max_cpu = int(val.split(" ")[-1]) - 1
+        if val.startswith("NUMA"):
+            nodes = val.split(" ")
+            numa_number = int(nodes[-1])
+            break
+
+    npu_max_cpu = False
+    npu_max_cpu_no = 0
     for val in numa_topo_out:
         line_no += 1
         line = ''.join(val.split())
         if line.startswith("NPU") and line_no > 1:
             cpu_range = line[33:]
+            npu_max_cpu_no = max(npu_max_cpu_no, int(cpu_range.split("-")[1]))
             if numa_to_npu_map.get(cpu_range, None) is None:
                 numa_to_npu_map[cpu_range] = list()
             numa_to_npu_map[cpu_range].append(npu_no)
             npu_no += 1
+
+    npu_max_cpu = True if npu_max_cpu_no==max_cpu else False
+    print(len(numa_to_npu_map), npu_no, numa_number, max_cpu, npu_max_cpu_no, npu_max_cpu)
+    shared_mode = False
+    if npu_no > numa_number:
+        shared_mode = True
+        print("Shared mode")
 
     npu_to_core_map = {}
     for key, val in numa_to_npu_map.items():
         cpu_range = key.split("-")
         cpu_start = int(cpu_range[0])
         cpu_end = int(cpu_range[1])
-        #total_core_num = cpu_end - cpu_start + 1
-        #shared_npu_num = len(val)
-        #core_num_per_npu = int(total_core_num / shared_npu_num)
-        core_num_per_npu = cpu_end - cpu_start + 1
+        if shared_mode:
+            total_core_num = cpu_end - cpu_start + 1
+            shared_npu_num = len(val)
+            core_num_per_npu = int(total_core_num / shared_npu_num)
+        else:
+            core_num_per_npu = cpu_end - cpu_start + 1 if npu_max_cpu==False else -(cpu_end - cpu_start + 1)
         core_start = cpu_start
         for npu in val:
             npu_to_core_map[npu] = core_start + core_num_per_npu - 1
-            core_start += core_num_per_npu
+            if affinity == False:
+                core_start += core_num_per_npu
+            else:
+                core_start -= core_num_per_workqueue
+                #core_start -= core_num_per_npu//2
 
     return npu_to_core_map
-
 
 def binding_cann_workqueue(device_num: int, core_num_per_workqueue: int, separate_device_cores: bool):
     """
@@ -325,7 +351,7 @@ def binding_cann_workqueue(device_num: int, core_num_per_workqueue: int, separat
     core_num_per_device = int(total_core_num / device_num)
 
     device_core_mask = BitArray(total_core_num)
-    end_core_map = get_numa_map()
+    end_core_map = get_numa_map(True, core_num_per_workqueue)
     for i in range(device_num):
         cann_workqueue_config_path = f"/sys/devices/virtual/workqueue/dev{i}_sq_send_wq/cpumask"
         mask = BitArray(total_core_num)

@@ -353,11 +353,11 @@ npu-smi set -t reset -i $id -c $chip_id
 
 该步骤在宿主机执行，需在所有节点执行
 
-**Step1:** 可使用fine-grainded-bind.py绑核脚本，进行细粒度绑核提升性能
+**Step1:** 可用绑核脚本，进行细粒度绑核提升性能
 
 ```shell
 # 所有节点执行
-python ./lib/fine-grainded-bind.py
+python ./lib/fine-grainded-bind-cann.py
 ```
 
 

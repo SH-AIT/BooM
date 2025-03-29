@@ -8,6 +8,7 @@ current_path=$(
 source $current_path/config.cfg
 # 安装docker
 yum install docker -y
+systemctl restart docker
 
 # 检测镜像是否已被拉取
 docker images | grep $IMAGE_NAME | grep $IMAGE_TAG

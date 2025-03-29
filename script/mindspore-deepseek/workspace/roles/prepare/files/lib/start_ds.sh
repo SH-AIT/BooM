@@ -37,9 +37,9 @@ fi
 #拉起服务
 rm -rf ds.log
 if [ $NODE_NUM -ne 1 ]; then
-    nohup python3 -m vllm_mindspore.entrypoints vllm.entrypoints.openai.api_server --model "$MODEL_PATH" --port=$LLM_PORT --trust_remote_code --tensor_parallel_size=$PARALLEL --max-num-seqs=192 --max_model_len=32768 --max-num-batched-tokens=16384 --block-size=32 --gpu-memory-utilization=0.93 --num-scheduler-steps=8 --distributed-executor-backend=ray &> ds.log &
+    nohup python3 -m vllm_mindspore.entrypoints vllm.entrypoints.openai.api_server --model "$MODEL_PATH" --port=$LLM_PORT --trust_remote_code --tensor_parallel_size=$PARALLEL --max-num-seqs=192 --max_model_len=32768 --max-num-batched-tokens=16384 --block-size=128 --gpu-memory-utilization=0.93 --num-scheduler-steps=8 --disable-async-output-proc --distributed-executor-backend=ray &> ds.log &
 else
-    nohup python3 -m vllm_mindspore.entrypoints vllm.entrypoints.openai.api_server --model "$MODEL_PATH" --port=$LLM_PORT --trust_remote_code --tensor_parallel_size=8 --max-num-seqs=192 --max_model_len=32768 --max-num-batched-tokens=16384 --block-size=32 --gpu-memory-utilization=0.93 --num-scheduler-steps=8 &> ds.log &
+    nohup python3 -m vllm_mindspore.entrypoints vllm.entrypoints.openai.api_server --model "$MODEL_PATH" --port=$LLM_PORT --trust_remote_code --tensor_parallel_size=8 --max-num-seqs=192 --max_model_len=32768 --max-num-batched-tokens=16384 --block-size=128 --gpu-memory-utilization=0.93 --num-scheduler-steps=8 --disable-async-output-proc &> ds.log &
 fi
 
 #检测推理服务是否拉起

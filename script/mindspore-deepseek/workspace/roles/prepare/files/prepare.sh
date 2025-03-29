@@ -30,11 +30,9 @@ main() {
     docker exec -it $CONTAINER_NAME /workspace/lib/set_env.sh
 
     # 4. 进行绑核
-    pip show psutil
-    if [ $? -ne 0 ]; then
-        pip install psutil
-    fi
-    python3 $current_path/lib/fine-grainded-bind.py
+    echo 3 > /proc/sys/vm/drop_caches
+    pip install psutil
+    python3 $current_path/lib/fine-grainded-bind-cann.py
     if [ $? -ne 0 ]; then
         echo "细粒度线程绑核失败，请确保驱动版本>=24.1.0"
         exit 1
