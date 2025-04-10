@@ -8,6 +8,7 @@ current_path=$(
 source $current_path/config.cfg
 # 安装docker
 yum install docker -y
+systemctl restart docker
 
 # 检测镜像是否已被拉取
 docker images | grep $IMAGE_NAME | grep $IMAGE_TAG
@@ -25,7 +26,7 @@ if [ $IS_STOP_OTHER_CONTAINER -ne 0 ]; then
 fi
 
 # 如果存在名称相同的容器，则直接使用
-docker ps -a | grep $IMAGE_NAME:$IMAGE_TAG | grep $CONTAINER_NAME
+docker ps -a | grep $IMAGE_NAME:$IMAGE_TAG | grep -w $CONTAINER_NAME
 if [ $? -eq 0 ]; then
     echo "发现容器 $CONTAINER_NAME 已存在，直接使用"
     docker start $CONTAINER_NAME
@@ -33,7 +34,7 @@ if [ $? -eq 0 ]; then
 fi
 
 # 如果存在名称相同，但镜像不同容器，则报错
-docker ps -a | grep $CONTAINER_NAME
+docker ps -a | grep -w $CONTAINER_NAME
 if [ $? -eq 0 ]; then
     echo "发现容器名称 $CONTAINER_NAME 已被使用，请排查"
     exit 1
