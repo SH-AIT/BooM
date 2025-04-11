@@ -8,6 +8,10 @@ source $current_path/config.cfg
 source $ENV_FILE
 ray_start() {
     ps -ef | grep "python" | grep -v grep | awk '{print $2}' | xargs kill
+    if [ $NODE_NUM -eq 1 ]; then
+        echo "单机部署无需启动ray"
+        return
+    fi
     ray stop
 
     if [ "$1" ]; then
