@@ -142,8 +142,8 @@ all:
   vars:
     # 容器镜像
     # 如果本地docker上已加载镜像，改成docker image的image_name和image_tag
-    image_name: hub.oepkgs.net/oedeploy/openeuler/aarch64/deepseek_hyperinfer
-    image_tag: openeuler22.03-py3.11
+    image_name: hub.oepkgs.net/oedeploy/openeuler/aarch64/mindspore
+    image_tag: 20250415  # 单机部署时，建议使用tag为20250326的容器镜像
     # 将要拉起的推理容器的名称
     container_name: openeuler_ds  # 启动之后的docker name，不能和已有镜像重名
     # 模型路径
