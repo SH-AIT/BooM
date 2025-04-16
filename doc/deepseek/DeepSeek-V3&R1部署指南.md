@@ -120,6 +120,7 @@ cd llm_solution/script/mindspore-deepseek
 
 ```shell
 # 调整mindspore-deepseek目录下config.yaml
+# 注意：w8a8与int4不同权重部署方式，使用的镜像tag不一致，可按照下文修改
 (base) [root@910b-3 mindspore-deepseek]# cat config.yaml 
 all:
   children:
@@ -142,8 +143,8 @@ all:
   vars:
     # 容器镜像
     # 如果本地docker上已加载镜像，改成docker image的image_name和image_tag
-    image_name: hub.oepkgs.net/oedeploy/openeuler/aarch64/deepseek_hyperinfer
-    image_tag: openeuler22.03-py3.11
+    image_name: hub.oepkgs.net/oedeploy/openeuler/aarch64/mindspore
+    image_tag: 20250415  # 单机部署时，请使用tag为20250326的容器镜像
     # 将要拉起的推理容器的名称
     container_name: openeuler_ds  # 启动之后的docker name，不能和已有镜像重名
     # 模型路径
