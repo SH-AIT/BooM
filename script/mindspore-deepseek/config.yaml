@@ -32,6 +32,8 @@
     is_stop_other_container: 0
     # 推理服务端口
     llm_port: 8000
+    # DP通信端口
+    dp_port: 12570
     # ray集群使用的网卡
     ray_device: enp67s0f0np0
     # 模型权重类型

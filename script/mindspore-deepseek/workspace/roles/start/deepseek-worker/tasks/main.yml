@@ -1,0 +1,2 @@
+- name: Start DeepSeek on worker
+  shell: docker exec {{ container_name }} /workspace/lib/start_ds.sh {{ hostvars[groups['masters'][0]].ansible_host }} 1
