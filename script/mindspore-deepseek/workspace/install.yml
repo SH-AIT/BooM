@@ -22,3 +22,15 @@
   roles:
     - start/deepseek
   any_errors_fatal: true
+
+- hosts:
+    - workers
+  roles:
+    - start/deepseek-worker
+  any_errors_fatal: true
+
+- hosts:
+    - masters
+  roles:
+    - start/check-ds
+  any_errors_fatal: true
