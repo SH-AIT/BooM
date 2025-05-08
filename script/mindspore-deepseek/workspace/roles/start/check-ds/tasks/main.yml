@@ -1,0 +1,6 @@
+- name: Set dir_path as a fact
+  set_fact:
+    dir_path: "/home/mindspore-deepseek"
+
+- name: Check DeepSeek status on master
+  shell: sh {{ dir_path }}/lib/check_ds.sh
