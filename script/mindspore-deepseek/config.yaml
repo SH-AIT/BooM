@@ -40,3 +40,11 @@
     model_type: safetensors
     # 跳过 ssh 校验（如需禁用此功能，请注释以下配置项）
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    # SSH连接复用参数，ControlMaster=auto启用连接复用，ControlPersist=60s保持连接60秒，ConnectTimeout=30设置连接超时30秒
+    ansible_ssh_args: '-o ControlMaster=auto -o ControlPersist=60s -o ConnectTimeout=30'
+    # 启用Ansible管道加速，减少SSH连接次数
+    ansible_pipelining: True
+    # 启用SSH管道加速，提升文件传输效率
+    ansible_ssh_pipelining: True
+    # 设置并行执行的任务数
+    ansible_forks: 10
