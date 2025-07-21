@@ -18,8 +18,8 @@
 
   vars:
     # 容器镜像
-    image_name: hub.oepkgs.net/oedeploy/openeuler/aarch64/deepseek_hyperinfer
-    image_tag: openeuler22.03-py3.11
+    image_name: hub.oepkgs.net/oedeploy/openeuler/aarch64/mindspore
+    image_tag: 20250717
     # 推理服务所在容器的名称
     container_name: openeuler_ds
     # 模型路径
@@ -38,6 +38,8 @@
     ray_device: enp67s0f0np0
     # 模型权重类型
     model_type: safetensors
+    # 后端(如果启动qwen2.5_vl,请设置为Native)
+    backend_type: MindFormers
     # 跳过 ssh 校验（如需禁用此功能，请注释以下配置项）
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
     # SSH连接复用参数，ControlMaster=auto启用连接复用，ControlPersist=60s保持连接60秒，ConnectTimeout=30设置连接超时30秒
