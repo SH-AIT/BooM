@@ -2,38 +2,37 @@
 
 # 设置TLS
 for i in {0..7}; do
-    hccn_tool -i $i -tls -s enable 0
+    hccn_tool -i $i -tls -s enable 0 &
 done
+wait
 
 # 检查TLS状态
-for i in {0..7}; do
-    hccn_tool -i $i -tls -g | grep switch
-done
+# for i in {0..7}; do
+#     hccn_tool -i $i -tls -g | grep switch
+# done
 
 # 检查链路状态
 for i in {0..7}; do
-    hccn_tool -i $i -link -g | grep -i 'link status: UP'
-    if [ $? -ne 0 ]; then
-        echo "节点npu设备 $i 检测link status不为UP"
-        exit 1
-    fi
+    {
+        output=$(hccn_tool -i $i -link -g 2>&1)
+        if grep -qi 'link status: UP' <<< "$output"; then
+            echo "link status: UP"
+        else
+            echo "节点npu设备 $i 检测link status不为UP" >&2
+            kill 0  # 终止整个脚本进程组
+        fi
+    } &
 done
-
-# 检查网络健康状态
-for i in {0..7}; do
-    hccn_tool -i $i -net_health -g | grep -i 'Success'
-    if [ $? -ne 0 ]; then
-        echo "节点npu设备 $i 检测net_health不为Success"
-    fi
-done
-
-# 检查IP信息
-for i in {0..7}; do
-    hccn_tool -i $i -ip -g
-done
+wait
 
 # 添加机器卡间互联检查
 check_inter_device_connection() {
+
+    # 检查IP信息
+    for i in {0..7}; do
+        hccn_tool -i $i -ip -g
+    done
+
     echo -e "${BLUE}请输入目标NPU卡的IP地址 (输入q退出检查):${NC}"
     while true; do
         read -p "IP地址: " target_ip
