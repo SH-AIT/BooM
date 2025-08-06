@@ -10,7 +10,7 @@ NC='\033[0m' # 重置颜色
 
 # 全局变量
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readonly MINDSPORE_DEEPSEEK_DIR="${SCRIPT_DIR}/../mindspore-deepseek"
+readonly MINDSPORE_DEEPSEEK_DIR="${SCRIPT_DIR}/../../../mindspore-deepseek"
 readonly CONFIG_FILE="${MINDSPORE_DEEPSEEK_DIR}/config.yaml"
 readonly YAML_EXTRACTOR="${SCRIPT_DIR}/yaml_extractor.py"
 readonly TIMEOUT_DURATION=45
@@ -144,6 +144,9 @@ function verify_deployment() {
 # 主函数
 function main() {
     echo -e "${BLUE}=== 开始安装流程 ===${NC}"
+
+    echo $SCRIPT_DIR
+    echo $MINDSPORE_DEEPSEEK_DIR
     
     # 步骤0：检查必要文件
     echo -e "${BLUE}步骤0/4：检查必要文件...${NC}"
