@@ -1,0 +1,31 @@
+{{- if .Values.euler_copilot.framework.enabled -}}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: framework-semantics
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: {{ default "local-path" .Values.globals.storageClass }}
+  capacity:
+    storage: {{ default "10Gi" .Values.storage.frameworkSemantics.size }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ default "/var/lib/eulercopilot" .Values.storage.frameworkSemantics.path }}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: framework-semantics-claim
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: {{ default "local-path" .Values.globals.storageClass }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ default "5Gi" .Values.storage.frameworkSemantics.size }}
+    volumeName: framework-semantics
+{{- end -}}

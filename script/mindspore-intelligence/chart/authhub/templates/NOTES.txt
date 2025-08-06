@@ -1,0 +1,7 @@
+感谢您使用openEuler Intelligence！
+当前为0.9.6版本。
+当前Chart的功能为：AuthHub统一登录系统部署。
+
+说明：
+AuthHub的默认用户名为：administrator
+AuthHub的默认密码为：changeme
