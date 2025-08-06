@@ -15,7 +15,7 @@
 参考mindspore-deepseek项目下的DeepSeekV3&R1部署指南-第四章节配置config.yaml后执行
 
 ```bash
-cd mindspore-intelligence/deploy
+cd mindspore-intelligence/script
 bash deploy.sh
 # 选择0开启一键式部署
 ```
