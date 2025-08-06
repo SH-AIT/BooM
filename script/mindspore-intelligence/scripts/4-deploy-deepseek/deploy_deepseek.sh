@@ -9,14 +9,19 @@ BLUE='\033[0;34m'
 NC='\033[0m' # 重置颜色
 
 # 全局变量
-readonly MINDSPORE_DEEPSEEK_DIR="/home/llm_solution-master/script/mindspore-deepseek"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly MINDSPORE_DEEPSEEK_DIR="${SCRIPT_DIR}/../mindspore-deepseek"
 readonly CONFIG_FILE="${MINDSPORE_DEEPSEEK_DIR}/config.yaml"
-readonly YAML_EXTRACTOR="./yaml_extractor.py"
+readonly YAML_EXTRACTOR="${SCRIPT_DIR}/yaml_extractor.py"
 readonly TIMEOUT_DURATION=45
 
 # 从配置文件中获取参数
 function get_config_value() {
     local key="$1"
+    if [ ! -f "$YAML_EXTRACTOR" ]; then
+        echo -e "${RED}错误: YAML解析脚本不存在: $YAML_EXTRACTOR${NC}"
+        return 1
+    fi
     python3 "$YAML_EXTRACTOR" -f "$CONFIG_FILE" -k "$key"
 }
 
@@ -39,6 +44,17 @@ function check_directory() {
         return 1
     fi
     echo -e "${GREEN}目录存在: $dir${NC}"
+    return 0
+}
+
+# 检查文件是否存在
+function check_file() {
+    local file=$1
+    if [ ! -f "$file" ]; then
+        echo -e "${RED}文件不存在: $file${NC}"
+        return 1
+    fi
+    echo -e "${GREEN}文件存在: $file${NC}"
     return 0
 }
 
@@ -108,7 +124,7 @@ function verify_deployment() {
 
         if [[ $? -eq 0 ]] && [[ -n "$response" ]]; then
             echo -e "${GREEN}测试响应成功，收到有效输出："
-            if jq -e .choices[0].message.content <<< "$response" &> /dev/null; then
+            if command -v jq &> /dev/null && jq -e .choices[0].message.content <<< "$response" &> /dev/null; then
                 jq .choices[0].message.content <<< "$response"
             else
                 echo "$response"
@@ -128,6 +144,11 @@ function verify_deployment() {
 # 主函数
 function main() {
     echo -e "${BLUE}=== 开始安装流程 ===${NC}"
+    
+    # 步骤0：检查必要文件
+    echo -e "${BLUE}步骤0/4：检查必要文件...${NC}"
+    check_file "$YAML_EXTRACTOR" || exit 1
+    check_file "$CONFIG_FILE" || exit 1
     
     # 步骤1：检查oedp工具
     echo -e "${BLUE}步骤1/4：检查oedp工具...${NC}"
