@@ -1,0 +1,10 @@
+{{- if .Values.euler_copilot.rag_web.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rag-web-config
+  namespace: {{ .Release.Namespace }}
+data:
+  .env: |-
+    DATA_CHAIN_BACEND_URL=http://rag-service.{{ .Release.Namespace }}.svc.cluster.local:9988
+{{- end -}}

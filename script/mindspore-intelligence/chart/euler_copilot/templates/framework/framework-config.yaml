@@ -1,0 +1,21 @@
+{{- if .Values.euler_copilot.framework.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: framework-config
+  namespace: {{ .Release.Namespace }}
+data:
+  config.toml: |-
+{{ tpl (.Files.Get "configs/framework/config.toml") . | indent 4 }}
+  copy-config.yaml: |-
+    copy:
+      - from: /config/config.toml
+        to: /config-rw/config.toml
+        mode:
+          uid: 0
+          gid: 0
+          mode: "0o650"
+        secrets:
+          - /db-secrets
+          - /system-secrets
+{{- end -}}
