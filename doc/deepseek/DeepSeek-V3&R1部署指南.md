@@ -80,7 +80,7 @@ yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
 # 固件安装
 ./Ascend-hdk-<chip_type>-npu-firmware_<version>.run --full
 
-# 方式2：需先下载部署插件包，该脚本在插件包内。参考4.2章节
+# 方式2：需先下载部署插件包，该脚本在插件包内。参考4.1章节
 sh mindspore-deepseek/workspace/roles/prepare/files/lib/ascend_prepare.sh
 # 安装后需要重启
 ```
@@ -107,9 +107,9 @@ sh mindspore-deepseek/workspace/roles/prepare/files/lib/ascend_prepare.sh
 
 ```shell
 # 下载安装oedp工具，例如:
-wget https://repo.oepkgs.net/openEuler/rpm/openEuler-24.03-LTS/contrib/oedp/aarch64/Packages/oedp-1.0.0-2.oe2503.aarch64.rpm
+wget https://repo.oepkgs.net/openEuler/rpm/openEuler-24.03-LTS/contrib/oedp/aarch64/Packages/oedp-1.0.1-1.oe2503.aarch64.rpm
 
-yum localinstall oedp-1.0.0-2.oe2503.aarch64.rpm
+yum localinstall oedp-*
 # 下载插件包
 git clone https://gitee.com/openeuler/llm_solution.git
 
@@ -143,8 +143,8 @@ all:
   vars:
     # 容器镜像
     # 如果本地docker上已加载镜像，改成docker image的image_name和image_tag
-    image_name: hub.oepkgs.net/oedeploy/openeuler/aarch64/mindspore
-    image_tag: 20250415  # 单机部署时，请使用tag为20250326的容器镜像
+    image_name: hub.oepkgs.net/oedeploy/openeuler/aarch64/intelligence_boom
+    image_tag: 0.1.0-aarch64-800I-A2-mindspore2.7-openeuler24.03-lts-sp2
     # 将要拉起的推理容器的名称
     container_name: openeuler_ds  # 启动之后的docker name，不能和已有镜像重名
     # 模型路径
@@ -161,6 +161,8 @@ all:
     ray_device: enp67s0f0np0  # ifconfig查找ip对应网卡的网卡名
     # 模型权重类型
     model_type: safetensors
+    # 后端类型
+    backend_type: MindFormers
     # 跳过 ssh 校验（如需禁用此功能，请注释以下配置项）
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 ```
@@ -348,27 +350,16 @@ npu-smi set -t reset -i $id -c $chip_id
 
 ### 5.6 服务启动
 
-该步骤在容器内执行，仅在主节点执行
+该步骤在容器内执行，在主从节点同时执行
 
-**Step1:** 可在主节点中启动服务，使用前请务必配置好config.cfg：
+**Step1:** 使用前请务必配置好config.cfg：
 
 ```shell
 #主节点执行 该脚本启动服务的日志，会存于ds.log中
-./lib/start_ds.sh
+./lib/start_ds.sh $MASTER_IP
+#从节点执行 该脚本启动服务的日志，会存于ds.log中
+./lib/start_ds.sh $MASTER_IP 1
 ```
-
-### 5.7 细粒度绑核
-
-该步骤在宿主机执行，需在所有节点执行
-
-**Step1:** 可用绑核脚本，进行细粒度绑核提升性能
-
-```shell
-# 所有节点执行
-python ./lib/fine-grained-bind-cann.py
-```
-
-
 
 ## 6. 服务化测试
 
