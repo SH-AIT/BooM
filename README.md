@@ -146,8 +146,6 @@ DeepSeek创新降低大模型落地门槛，AI进入“杰文斯悖论”时刻�
 
 **组件构成​：**异构融合编译器（Bisheng）
 
-【Bisheng开源地址】https://github.com/dataelement/bisheng
-
 **核心价值**
 
 **跨硬件优化： **针对CPU（x86/ARM）、GPU（CUDA）、NPU（昇腾/CANN）的指令集差异，自动转换计算逻辑，算力利用率大幅提升%；
