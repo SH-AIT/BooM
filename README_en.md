@@ -122,8 +122,6 @@ To solve the preceding problems, we collaborate with the open source community t
 
 \*\*Component composition: \*\*Heterogeneous integration compiler (Bisheng)
 
-\[Bisheng open source address\] https://github.com/dataelement/bisheng
-
 **Core Value**
 
 \*\* Cross-hardware optimization: \* \* Automatically converts computing logic based on instruction set differences between CPU (x86/ARM), GPU (CUDA), and NPU (Ascend/CANN), greatly improving computing power utilization by%.
