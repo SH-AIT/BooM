@@ -42,7 +42,7 @@ To solve the preceding problems, we collaborate with the open source community t
 
 ## Technical Architecture ##
 
-![Image](doc/deepseek/asserts/IntelligenceBoom_en.png}	
+![Image](doc/deepseek/asserts/IntelligenceBoom_en.png)	
 
 #### **Intelligent Application Platform: Quickly Connect Your Business to AI**  ####
 
@@ -152,7 +152,7 @@ To solve the preceding problems, we collaborate with the open source community t
 
 #### **Connected technology: "high-speed conversation" with hardware**  ####
 
-**Component composition:** UB (universal bus), CXL (computing and memory expansion), NVLink (Nvidia high-speed interconnection), SUE
+**Component composition:** CXL (computing and memory expansion), NVLink (Nvidia high-speed interconnection), SUE
 
 **Core Values** 
 
