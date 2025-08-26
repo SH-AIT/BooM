@@ -50,7 +50,7 @@ DeepSeek创新降低大模型落地门槛，AI进入“杰文斯悖论”时刻�
 
 ## 技术架构
 
-![](/Users/项目/llm方案/xin/llm_solution/doc/deepseek/asserts/IntelligenceBoom.png)
+![Image](doc/deepseek/asserts/IntelligenceBoom.png)
 
 
 
@@ -182,7 +182,7 @@ DeepSeek创新降低大模型落地门槛，AI进入“杰文斯悖论”时刻�
 
 #### **互联技术：让硬件“高速对话”​​** 
 
-**组件构成​：** UB（通用总线）、CXL（计算与内存扩展）、NvLink（英伟达高速互联）、SUE
+**组件构成​：** CXL（计算与内存扩展）、NvLink（英伟达高速互联）、SUE
 
 **核心价值** 
 
