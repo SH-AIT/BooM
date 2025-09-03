@@ -321,7 +321,7 @@ def get_dataset_requests(args, tokenizer, prompt_tokens, output_tokens, parallel
                                                         tokenizer,
                                                         None if args.use_real_dataset_output_tokens else output_tokens)
         else:
-            raise ValueError("Unsupport dataset.")
+            raise ValueError("Unsupported dataset.")
 
 
 def main(args: argparse.Namespace):
@@ -380,7 +380,7 @@ def main(args: argparse.Namespace):
     if args.dataset_type == "random":
         all_latency_record.sort()
     else:
-        # the mean input tokens and output tokens of real dataset will be a little diffferent in defferent batch_size,
+        # the mean input tokens and output tokens of real dataset will be a little different in different batch_size,
         # so just sort by batch_size
         all_latency_record.sort(key=lambda x: x[2])
 
