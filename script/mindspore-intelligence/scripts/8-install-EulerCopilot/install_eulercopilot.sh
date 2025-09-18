@@ -367,7 +367,7 @@ modify_yaml() {
             "--set" "models.functionCall.backend=openai"
             "--set" "models.functionCall.endpoint=http://$host:$port"
             "--set" "models.embedding.type=openai"
-	    "--set" "models.embedding.endpoint=http://$internal_host:11434/v1"
+	    "--set" "models.embedding.endpoint=http://192.168.30.53:11434/v1"
             "--set" "models.embedding.key=sk-123456"
             "--set" "models.embedding.name=bge-m3:latest"
         )
