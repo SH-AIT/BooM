@@ -1,0 +1,20 @@
+- hosts:
+    - masters
+  roles:
+    - prepare
+  any_errors_fatal: true
+  gather_facts: false
+
+- hosts:
+    - masters
+  roles:
+    - start/qwen2.5
+  any_errors_fatal: true
+  gather_facts: false
+
+- hosts:
+    - masters
+  roles:
+    - start/check-qwen2.5
+  any_errors_fatal: true
+  gather_facts: false

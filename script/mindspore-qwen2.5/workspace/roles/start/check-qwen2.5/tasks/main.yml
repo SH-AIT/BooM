@@ -1,0 +1,2 @@
+- name: Check Qwen2.5 status on master
+  shell: sh /home/mindspore-qwen2.5/lib/check_qwen2.5.sh

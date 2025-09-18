@@ -1,0 +1,9 @@
+name: mindspore-qwen2.5
+description: auto deploy Qwen2.5 with mindspore
+action:
+  install:
+    description: auto deployment
+    tasks:
+      - name: install
+        playbook: install.yml
+        scope: all

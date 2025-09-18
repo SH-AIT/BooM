@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# 各个节点均执行
+current_path=$(
+    cd $(dirname $0/)
+    pwd
+)
+source $current_path/config.cfg
+# 安装docker
+yum install docker -y
+
+# 检测镜像是否已被拉取
+docker images | grep $IMAGE_NAME | grep $IMAGE_TAG
+if [ $? -ne 0 ]; then
+    docker pull $IMAGE_NAME:$IMAGE_TAG
+    if [ $? -ne 0 ]; then
+        echo "docker镜像拉取失败，请手动下载并加载"
+        exit 1
+    fi
+fi
+
+# 停止所有现存容器实例
+if [ $IS_STOP_OTHER_CONTAINER -ne 0 ]; then
+    docker stop $(docker ps -aq)
+fi
+
+# 如果存在名称相同的容器，则直接使用
+docker ps -a | grep $IMAGE_NAME:$IMAGE_TAG | grep -w $CONTAINER_NAME
+if [ $? -eq 0 ]; then
+    echo "发现容器 $CONTAINER_NAME 已存在，直接使用"
+    docker start $CONTAINER_NAME
+    exit 0
+fi
+
+# 如果存在名称相同，但镜像不同容器，则报错
+docker ps -a | grep -w $CONTAINER_NAME
+if [ $? -eq 0 ]; then
+    echo "发现容器名称 $CONTAINER_NAME 已被使用，请排查"
+    exit 1
+fi
+
+# 拉起容器实例
+docker run -itd --privileged  --name=$CONTAINER_NAME --net=host --ipc=host\
+    --device=/dev/davinci0 \
+    --device=/dev/davinci1 \
+    --device=/dev/davinci2 \
+    --device=/dev/davinci3 \
+    --device=/dev/davinci_manager \
+    --device=/dev/hisi_hdc \
+    --device /dev/devmm_svm \
+    -v /usr/local/Ascend/driver:/usr/local/Ascend/driver \
+    -v /usr/local/Ascend/add-ons/:/usr/local/Ascend/add-ons/ \
+    -v /usr/local/sbin/:/usr/local/sbin/ \
+    -v /var/log/npu/slog/:/var/log/npu/slog \
+    -v /var/log/npu/profiling/:/var/log/npu/profiling \
+    -v /var/log/npu/dump/:/var/log/npu/dump \
+    -v /var/log/npu/:/usr/slog \
+    -v /etc/hccn.conf:/etc/hccn.conf \
+    -v $MODEL_PATH:$MODEL_PATH \
+    $IMAGE_NAME:$IMAGE_TAG \
+    bash

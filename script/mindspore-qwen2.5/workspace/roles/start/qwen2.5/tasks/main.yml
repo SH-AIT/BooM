@@ -1,0 +1,2 @@
+- name: Start Qwen on master
+  shell: docker exec {{ container_name }} /workspace/lib/start_qwen2.5.sh {{ hostvars[groups['masters'][0]].ansible_host }}

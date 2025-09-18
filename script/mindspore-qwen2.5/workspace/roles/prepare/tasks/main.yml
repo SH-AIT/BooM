@@ -1,0 +1,44 @@
+- name: Set hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Set dir_path as a fact
+  set_fact:
+    dir_path: "/home/mindspore-qwen2.5"
+
+- name: Create directory
+  file:
+    path: "{{ dir_path }}"
+    state: directory
+    mode: '0644'
+
+- name: install python3-libselinux
+  yum:
+    name: python3-libselinux
+    state: present
+
+- name: install rsync
+  yum:
+    name: rsync
+    state: present
+
+- name: Sync prepare.sh to hosts using rsync
+  synchronize:
+    src: prepare.sh
+    dest: "{{ dir_path }}"
+    rsync_opts: "--chmod=755"
+
+- name: Copy lib to hosts
+  synchronize:
+    src: lib
+    dest: "{{ dir_path }}"
+    rsync_opts: "--chmod=644"
+
+- name: Copy config.cfg to hosts
+  template:
+    src: config.cfg.j2
+    dest: "{{ dir_path }}/lib/config.cfg"
+    mode: '0644'
+
+- name: Execute prepare.sh
+  shell: sh {{ dir_path }}/prepare.sh
