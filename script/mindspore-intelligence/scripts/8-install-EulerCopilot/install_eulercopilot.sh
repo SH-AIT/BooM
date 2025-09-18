@@ -18,8 +18,9 @@ client_id=""
 client_secret=""
 eulercopilot_address=""
 authhub_address=""
-MINDSPORE_DEEPSEEK_DIR="/home/llm_solution-master/script/mindspore-deepseek"
-CONFIG_FILE="${MINDSPORE_DEEPSEEK_DIR}/config.yaml"
+MINDSPORE_QWEN_DIR="/root/cheliu/llm_solution/script/mindspore-qwen2.5/"
+
+CONFIG_FILE="${MINDSPORE_QWEN_DIR}/config.yaml"
 
 SCRIPT_PATH="$(
   cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1

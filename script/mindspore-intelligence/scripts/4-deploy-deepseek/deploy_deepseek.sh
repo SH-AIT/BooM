@@ -8,10 +8,13 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # 重置颜色
 
+
+echo 
+
 # 全局变量
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readonly MINDSPORE_DEEPSEEK_DIR="${SCRIPT_DIR}/../../../mindspore-deepseek"
-readonly CONFIG_FILE="${MINDSPORE_DEEPSEEK_DIR}/config.yaml"
+readonly MINDSPORE_QWEN_DIR="${SCRIPT_DIR}/../../../mindspore-qwen2.5"
+readonly CONFIG_FILE="${MINDSPORE_QWEN_DIR}/config.yaml"
 readonly YAML_EXTRACTOR="${SCRIPT_DIR}/yaml_extractor.py"
 readonly TIMEOUT_DURATION=45
 
@@ -58,16 +61,16 @@ function check_file() {
     return 0
 }
 
-# 安装deepseek
-function install_deepseek() {
+# 安装qwen
+function install_qwen() {
     local install_dir=$1
     echo -e "${YELLOW}执行: oedp run install -p $install_dir${NC}"
     
     if oedp run install -p "$install_dir"; then
-        echo -e "${GREEN}deepseek安装成功${NC}"
+        echo -e "${GREEN}qwen安装成功${NC}"
         return 0
     else
-        echo -e "${RED}deepseek安装失败${NC}"
+        echo -e "${RED}qwen安装失败${NC}"
         return 1
     fi
 }
@@ -81,6 +84,11 @@ function verify_deployment() {
     local PORT=$(get_config_value "all.vars.llm_port")
     local MODEL_NAME=$(get_config_value "all.vars.model_path")
     
+    echo ${IP}
+    echo ${PORT}
+    echo ${MODEL_NAME}
+
+
     # 验证参数获取
     if [ -z "$IP" ] || [ -z "$PORT" ] || [ -z "$MODEL_NAME" ]; then
         echo -e "${RED}从配置文件获取参数失败${NC}"
@@ -146,7 +154,7 @@ function main() {
     echo -e "${BLUE}=== 开始安装流程 ===${NC}"
 
     echo $SCRIPT_DIR
-    echo $MINDSPORE_DEEPSEEK_DIR
+    echo $MINDSPORE_QWEN_DIR
     
     # 步骤0：检查必要文件
     echo -e "${BLUE}步骤0/4：检查必要文件...${NC}"
@@ -163,9 +171,9 @@ function main() {
         exit 1
     }
     
-    # 步骤2：检查mindspore-deepseek目录
-    echo -e "${BLUE}步骤2/4：检查mindspore-deepseek目录...${NC}"
-    check_directory "$MINDSPORE_DEEPSEEK_DIR" || {
+    # 步骤2：检查mindspore-qwen2.5目录
+    echo -e "${BLUE}步骤2/4：检查mindspore-qwen2.5目录...${NC}"
+    check_directory "$MINDSPORE_QWEN_DIR" || {
         echo -e "${YELLOW}可能原因："
         echo "1. 项目未正确克隆"
         echo "2. 当前工作目录错误"
@@ -173,9 +181,9 @@ function main() {
         exit 1
     }
     
-    # 步骤3：安装deepseek
-    echo -e "${BLUE}步骤3/4：安装deepseek...${NC}"
-    install_deepseek "$MINDSPORE_DEEPSEEK_DIR" || {
+    # 步骤3：安装qwen
+    echo -e "${BLUE}步骤3/4：安装qwen...${NC}"
+    install_qwen "$MINDSPORE_QWEN_DIR" || {
         echo -e "${YELLOW}可能原因："
         echo "1. 安装脚本执行失败"
         echo "2. 依赖项缺失"
