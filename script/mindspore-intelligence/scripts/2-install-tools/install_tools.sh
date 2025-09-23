@@ -72,7 +72,7 @@ done
 # 增强型网络检查
 function check_network {
     echo -e "[Info] 正在检查网络连接..."
-    if curl --retry 3 --retry-delay 2 --connect-timeout 5 -Is https://github.com | head -n 1 | grep 200 >/dev/null; then
+    if curl --retry 3 --retry-delay 2 --connect-timeout 5 -Is "${GITHUB_MIRROR}/https://github.com" | head -n 1 | grep 200 >/dev/null; then
         echo -e "\033[32m[OK] 网络连接正常\033[0m"
         return 0
     else
