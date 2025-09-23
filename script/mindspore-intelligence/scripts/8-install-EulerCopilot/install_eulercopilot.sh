@@ -12,13 +12,17 @@ NC='\e[0m' # 恢复默认颜色
 NAMESPACE="euler-copilot"
 PLUGINS_DIR="/var/lib/eulercopilot"
 
+
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+echo -e "${BLUE}脚本所在绝对目录(SCRIPT_DIR): ${SCRIPT_DIR}${NC}"
+
 # 全局变量声明
 internal_ip=""
 client_id=""
 client_secret=""
 eulercopilot_address=""
 authhub_address=""
-MINDSPORE_QWEN_DIR="/root/cheliu/llm_solution/script/mindspore-qwen2.5/"
+MINDSPORE_QWEN_DIR="../../../mindspore-qwen2.5/"
 
 CONFIG_FILE="${MINDSPORE_QWEN_DIR}/config.yaml"
 
