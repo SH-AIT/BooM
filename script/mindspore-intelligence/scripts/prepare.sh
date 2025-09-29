@@ -1,11 +1,11 @@
 mkdir /home/eulercopilot/
 
 echo "necessary tools"
-yum install -y vim unzip rsync which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) docker
+yum install -y vim unzip sshpass rsync which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) docker
 
 echo "copy files"
 ssh-keyscan 192.168.30.50 >> ~/.ssh/known_hosts
-sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv//home/nv/eulercopilot/ /home/eulercopilot/
+sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/ /home/eulercopilot/
 
 echo "install oedp"
 yum localinstall -y /home/eulercopilot/tools/oedp-1.0.1-1.oe2503.aarch64.rpm
