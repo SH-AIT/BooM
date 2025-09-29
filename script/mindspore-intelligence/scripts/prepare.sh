@@ -22,9 +22,9 @@ useradd -g HwHiAiUser -d /home/HwHiAiUser -m HwHiAiUser -s /bin/bash
 /home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-firmware_7.7.0.6.236.run --full
 
 echo "network setting"
-cd /etc/sysconfig/network-scripts/
-cp --no-clobber ifcfg-enp125s0f0 ifcfg-enp125s0f0.ori
-sed -i '/BOOTPROTO=dhcp/s/dhcp/static/' ifcfg-enp125s0f0 && echo -e "IPADDR=192.168.30.56\nNETMASK=255.255.255.0\nGATEWAY=192.168.30.1\nDNS1=114.114.114.114\nDNS2=8.8.8.8" >> ifcfg-enp125s0f0
+grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
+sed -i '/BOOTPROTO=dhcp/s/dhcp/static/' /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
+echo -e "IPADDR=192.168.30.56\nNETMASK=255.255.255.0\nGATEWAY=192.168.30.1\nDNS1=114.114.114.114\nDNS2=8.8.8.8" >> /etc/sysconfig/network-scripts/ifcfg-enp125s0f0
 
 echo "done, reboot required!"
 sync
