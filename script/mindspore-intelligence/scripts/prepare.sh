@@ -2,15 +2,13 @@ mkdir /home/eulercopilot/
 
 echo "necessary tools"
 yum install -y vim unzip rsync which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) docker
-wget https://repo.oepkgs.net/openEuler/rpm/openEuler-24.03-LTS/contrib/oedp/aarch64/Packages/oedp-1.0.1-1.oe2503.aarch64.rpm
-yum localinstall -y oedp-1.0.1-1.oe2503.aarch64.rpm
-sleep 1
-
-echo "prepare for copy"
-ssh-keyscan 192.168.30.50 >> ~/.ssh/known_hosts
 
 echo "copy files"
+ssh-keyscan 192.168.30.50 >> ~/.ssh/known_hosts
 sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv//home/nv/eulercopilot/ /home/eulercopilot/
+
+echo "install oedp"
+yum localinstall -y /home/eulercopilot/tools/oedp-1.0.1-1.oe2503.aarch64.rpm
 
 echo "docker preload image"
 docker load -i /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar
