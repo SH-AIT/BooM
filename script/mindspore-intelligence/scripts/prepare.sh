@@ -3,7 +3,9 @@ mkdir -p /home/eulercopilot/
 echo "necessary tools"
 yum install -y vim unzip sshpass rsync which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) docker
 
+
 echo "docker preload image"
+mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
 ssh-keyscan 192.168.30.50 >> ~/.ssh/known_hosts
 sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz
 docker load -i /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz &
