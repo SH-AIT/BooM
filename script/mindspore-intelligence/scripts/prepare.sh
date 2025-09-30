@@ -1,4 +1,4 @@
-mkdir /home/eulercopilot/
+mkdir -p /home/eulercopilot/
 
 echo "necessary tools"
 yum install -y vim unzip sshpass rsync which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) docker
