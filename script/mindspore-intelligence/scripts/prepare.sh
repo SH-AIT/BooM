@@ -25,5 +25,8 @@ grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
 sed -i '/BOOTPROTO=dhcp/s/dhcp/static/' /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
 echo -e "IPADDR=192.168.30.56\nNETMASK=255.255.255.0\nGATEWAY=192.168.30.1\nDNS1=114.114.114.114\nDNS2=8.8.8.8" >> /etc/sysconfig/network-scripts/ifcfg-enp125s0f0
 
+echo "set hostname which identical with LLM depoly all.children.masters.hosts"
+hostnamectl set-hostname master1
+
 echo "done, reboot required!"
 sync
