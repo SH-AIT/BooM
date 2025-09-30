@@ -16,7 +16,7 @@
     # 推理服务所在容器的名称
     container_name: openeuler_qwen2.5
     # 模型路径
-    model_path: /home/eulercopilot/wights/Qwen2.5-14B-Instruct/
+    model_path: /home/eulercopilot/weights/Qwen2.5-14B-Instruct/
     # ray 开放的端口
     ray_port: 6379
     # 节点个数
