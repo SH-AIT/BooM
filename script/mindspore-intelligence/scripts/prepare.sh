@@ -11,22 +11,23 @@ mkdir -p /home/eulercopilot/docker-images
 sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz
 docker load -i /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz &
 
-echo "copy other files"
-sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/ /home/eulercopilot/
-
-echo "install oedp"
-yum localinstall -y /home/eulercopilot/tools/oedp-1.0.1-1.oe2503.aarch64.rpm
-
 echo "install npu drivers"
+mkdir -p /home/eulercopilot/npu-driver
+sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/npu-driver/ /home/eulercopilot/npu-driver/
 groupadd HwHiAiUser
 useradd -g HwHiAiUser -d /home/HwHiAiUser -m HwHiAiUser -s /bin/bash
-/home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-driver_25.2.0_linux-aarch64.run --full --install-for-all
-/home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-firmware_7.7.0.6.236.run --full
+( /home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-driver_25.2.0_linux-aarch64.run --full --install-for-all && /home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-firmware_7.7.0.6.236.run --full )  &
+
+echo "copy other files"
+sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/ /home/eulercopilot/
 
 echo "network setting"
 grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
 sed -i '/BOOTPROTO=dhcp/s/dhcp/static/' /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
 echo -e "IPADDR=192.168.30.56\nNETMASK=255.255.255.0\nGATEWAY=192.168.30.1\nDNS1=114.114.114.114\nDNS2=8.8.8.8" >> /etc/sysconfig/network-scripts/ifcfg-enp125s0f0
+
+echo "install oedp"
+yum localinstall -y /home/eulercopilot/tools/oedp-1.0.1-1.oe2503.aarch64.rpm
 
 echo "set hostname which identical with LLM depoly all.children.masters.hosts"
 hostnamectl set-hostname master1
