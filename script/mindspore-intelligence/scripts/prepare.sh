@@ -7,6 +7,7 @@ yum install -y vim unzip sshpass rsync which initscripts coreutils findutils gaw
 echo "docker preload image"
 mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
 ssh-keyscan 192.168.30.50 >> ~/.ssh/known_hosts
+mkdir -p /home/eulercopilot/docker-images
 sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz
 docker load -i /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz &
 
