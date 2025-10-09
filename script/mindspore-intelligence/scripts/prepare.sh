@@ -1,8 +1,8 @@
 mkdir -p /home/eulercopilot/
 
 echo "necessary tools"
-yum install -y vim unzip sshpass rsync which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) docker
-
+yum install -y sshpass rsync docker
+yum install -y vim unzip which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) &
 
 echo "docker preload image"
 mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
