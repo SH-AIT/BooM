@@ -409,36 +409,6 @@ pre_install_checks() {
     kubectl get storageclasses >/dev/null 2>&1 || error_exit "无法获取存储类信息"
 }
 
-import_images() {
-    echo -e "${BLUE}==> 开始导入容器镜像...${NC}"
-
-    local image_files=(
-        "/home/eulercopilot/k8s-images/data_chain_back_end-0.9.6-arm.tar"
-        "/home/eulercopilot/k8s-images/data_chain_web-0.9.6-arm.tar"
-        "/home/eulercopilot/k8s-images/euler-copilot-framework-0.9.6-arm.tar"
-        "/home/eulercopilot/k8s-images/euler-copilot-web-0.9.6-arm.tar"
-        "/home/eulercopilot/k8s-images/secret_inject-dev-arm.tar"
-    )
-
-    for img in "${image_files[@]}"; do
-        if [ -f "$img" ]; then
-            echo -e "${BLUE}正在导入镜像: $img${NC}"
-            if ! ctr -n=k8s.io images import "$img"; then
-                echo -e "${RED}错误：导入镜像 $img 失败！${NC}" >&2
-                return 1
-            fi
-            echo -e "${GREEN}镜像导入成功: $img${NC}"
-        else
-            echo -e "${YELLOW}警告：镜像文件不存在: $img${NC}"
-        fi
-    done
-
-    echo -e "${BLUE}==> 当前已导入的镜像列表:${NC}"
-    ctr -n=k8s.io images ls
-
-    echo -e "${GREEN}容器镜像导入完成${NC}"
-}
-
 # 执行安装
 execute_helm_install() {
     echo -e "${BLUE}开始部署EulerCopilot（架构: $arch）...${NC}" >&2
@@ -528,9 +498,7 @@ main() {
     
     echo -e "${BLUE}开始修改YAML配置...${NC}"
     modify_yaml $internal_host $preserve_models
-
-    import_images
-
+    
     echo -e "${BLUE}开始Helm安装...${NC}"
     execute_helm_install
     
