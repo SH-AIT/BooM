@@ -49,6 +49,39 @@ create_namespace() {
     fi
 }
 
+import_images() {
+    echo -e "${BLUE}==> 开始导入容器镜像...${NC}"
+    
+    local image_files=(
+        "/home/eulercopilot/k8s-images/minio.tar"
+        "/home/eulercopilot/k8s-images/mongo.tar"
+        "/home/eulercopilot/k8s-images/opengauss.tar"
+        "/home/eulercopilot/k8s-images/pgsql-empty.tar"
+        "/home/eulercopilot/k8s-images/redis.tar"
+    )
+    
+    for img in "${image_files[@]}"; do
+        if [ -f "$img" ]; then
+            echo -e "${BLUE}正在导入镜像: $img${NC}"
+            if ! ctr -n=k8s.io images import "$img"; then
+                echo -e "${RED}错误：导入镜像 $img 失败！${NC}" >&2
+                return 1
+            fi
+            echo -e "${GREEN}镜像导入成功: $img${NC}"
+        else
+            echo -e "${YELLOW}警告：镜像文件不存在: $img${NC}"
+        fi
+    done
+    
+    echo -e "${BLUE}==> 当前已导入的镜像列表:${NC}"
+    ctr -n=k8s.io images ls
+    
+    echo -e "${GREEN}容器镜像导入完成${NC}"
+}
+
+
+
+
 uninstall_databases() {
     echo -e "${BLUE}==> 清理现有资源...${NC}"
 
@@ -158,6 +191,7 @@ main() {
     get_architecture
     create_namespace
     uninstall_databases
+    import_images
     helm_install
     check_pods_status
 
