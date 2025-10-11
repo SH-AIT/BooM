@@ -118,6 +118,8 @@ install_basic_tools() {
         --disable-pip-version-check \
         --retries 3 \
         --timeout 60 \
+        --trusted-host pypi.tuna.tsinghua.edu.cn \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple \
         ruamel.yaml requests; then
         echo -e "[ERROR] Failed to install ruamel.yaml and requests via pip" >&2
     fi

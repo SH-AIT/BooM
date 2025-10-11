@@ -12,10 +12,6 @@ NC='\e[0m' # 恢复默认颜色
 NAMESPACE="euler-copilot"
 PLUGINS_DIR="/var/lib/eulercopilot"
 
-
-SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-echo -e "${BLUE}脚本所在绝对目录(SCRIPT_DIR): ${SCRIPT_DIR}${NC}"
-
 # 全局变量声明
 internal_ip=""
 client_id=""

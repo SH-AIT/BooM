@@ -8,9 +8,6 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # 重置颜色
 
-
-echo 
-
 # 全局变量
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly MINDSPORE_QWEN_DIR="${SCRIPT_DIR}/../../../mindspore-qwen2.5"
@@ -84,11 +81,6 @@ function verify_deployment() {
     local PORT=$(get_config_value "all.vars.llm_port")
     local MODEL_NAME=$(get_config_value "all.vars.model_path")
     
-    echo ${IP}
-    echo ${PORT}
-    echo ${MODEL_NAME}
-
-
     # 验证参数获取
     if [ -z "$IP" ] || [ -z "$PORT" ] || [ -z "$MODEL_NAME" ]; then
         echo -e "${RED}从配置文件获取参数失败${NC}"
