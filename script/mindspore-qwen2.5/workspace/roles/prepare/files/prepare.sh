@@ -33,6 +33,14 @@ main() {
     #进入容器执行
     # 3. 设置容器内环境变量
     docker exec $CONTAINER_NAME /workspace/lib/set_env.sh
+
+    # 4. 进行绑核
+    pip install psutil
+    python3 $current_path/lib/fine-grained-bind-cann.py
+    if [ $? -ne 0 ]; then
+        echo "细粒度线程绑核失败，请确保驱动版本>=24.1.0"
+        exit 1
+    fi
 }
 
 # 执行主函数
