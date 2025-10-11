@@ -420,4 +420,4 @@ def binding_cann_workqueue(device_num: int, core_num_per_workqueue: int, separat
             bind_cann_core_cmd = f"echo \"{device_core_mask_str}\" > {cann_workqueue_config_path}"
             execute_cmd(bind_cann_core_cmd, False)
 
-binding_cann_workqueue(8, 4, True)
+binding_cann_workqueue(4, 4, True)
