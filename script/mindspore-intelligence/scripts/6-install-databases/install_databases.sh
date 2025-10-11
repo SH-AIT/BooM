@@ -49,6 +49,26 @@ create_namespace() {
     fi
 }
 
+import_images() {
+    echo -e "${BLUE}==> 开始导入镜像...${NC}"
+
+    local import_script_path="$(dirname "${SCRIPT_PATH}")/../9-other-script/import_images.sh"
+    local version="0.9.6"
+
+    if [ ! -f "$import_script_path" ]; then
+        echo -e "${RED}错误：找不到镜像导入脚本 $import_script_path${NC}"
+        return 1
+    fi
+
+    echo -e "${YELLOW}执行镜像导入脚本: $import_script_path -v $version${NC}"
+    if ! bash "$import_script_path" -v "$version"; then
+        echo -e "${RED}错误：镜像导入失败！${NC}"
+        return 1
+    fi
+
+    echo -e "${GREEN}镜像导入完成${NC}"
+}
+
 uninstall_databases() {
     echo -e "${BLUE}==> 清理现有资源...${NC}"
 
@@ -158,6 +178,7 @@ main() {
     get_architecture
     create_namespace
     uninstall_databases
+    import_images
     helm_install
     check_pods_status
 
