@@ -34,6 +34,6 @@ fi
 #fi
 
 
-nohup vllm-mindspore serve "/home/eulercopilot/llm_models/Qwen2.5-14B-Instruct/" --port=$LLM_PORT --trust_remote_code --tensor_parallel_size=4 --max-num-seqs=256 --block-size=128 --gpu-memory-utilization=0.5 --max-num-batched-tokens=4096 --max-model-len=8192 &> qwen2.5.log &
+nohup vllm-mindspore serve "/home/eulercopilot/llm_models/Qwen2.5-14B-Instruct/" --port=$LLM_PORT --trust_remote_code --tensor_parallel_size=2 --max-num-seqs=256 --block-size=128 --gpu-memory-utilization=0.5 --max-num-batched-tokens=4096 --max-model-len=8192 &> qwen2.5.log &
 
 

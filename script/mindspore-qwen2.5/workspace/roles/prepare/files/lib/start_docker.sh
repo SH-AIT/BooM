@@ -43,7 +43,6 @@ fi
 docker run -itd --privileged  --name=$CONTAINER_NAME --net=host --ipc=host\
     --device=/dev/davinci0 \
     --device=/dev/davinci1 \
-    --device=/dev/davinci2 \
     --device=/dev/davinci_manager \
     --device=/dev/hisi_hdc \
     --device /dev/devmm_svm \
