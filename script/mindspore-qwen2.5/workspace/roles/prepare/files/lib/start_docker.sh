@@ -40,11 +40,10 @@ if [ $? -eq 0 ]; then
 fi
 
 # 拉起容器实例
-docker run -itd --privileged  --name=$CONTAINER_NAME --net=host --ipc=host\
+docker run -itd  --name=$CONTAINER_NAME --net=host --ipc=host\
     --device=/dev/davinci0 \
     --device=/dev/davinci1 \
     --device=/dev/davinci2 \
-    --device=/dev/davinci3 \
     --device=/dev/davinci_manager \
     --device=/dev/hisi_hdc \
     --device /dev/devmm_svm \
