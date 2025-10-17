@@ -2,24 +2,23 @@ mkdir -p /home/eulercopilot/
 
 echo "necessary tools"
 yum install -y sshpass rsync docker
-yum install -y vim unzip which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r) &
+yum install -y vim unzip which initscripts coreutils findutils gawk e2fsprogs util-linux net-tools pciutils gcc g++ make automake autoconf libtool git dkms dpkg python3-pip kernel-headers-$(uname -r) kernel-devel-$(uname -r)
 
-echo "docker preload image"
+echo "sync files"
 mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
 ssh-keyscan 192.168.30.50 >> ~/.ssh/known_hosts
-mkdir -p /home/eulercopilot/docker-images
-sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz
-docker load -i /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz &
+sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/ /home/eulercopilot/
+
+echo "docker preload image"
+docker load -i /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz
+docker load -i /home/eulercopilot/docker-images/mis-tei-image.tar
 
 echo "install npu drivers"
-mkdir -p /home/eulercopilot/npu-driver
-sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/npu-driver/ /home/eulercopilot/npu-driver/
 groupadd HwHiAiUser
 useradd -g HwHiAiUser -d /home/HwHiAiUser -m HwHiAiUser -s /bin/bash
-( /home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-driver_25.2.0_linux-aarch64.run --full --install-for-all && /home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-firmware_7.7.0.6.236.run --full )  &
-
-echo "copy other files"
-sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/ /home/eulercopilot/
+/home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-driver_25.2.0_linux-aarch64.run --full --install-for-all
+/home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-firmware_7.7.0.6.236.run --full
+/home/eulercopilot/npu-driver/Ascend-docker-runtime_7.1.RC1_linux-aarch64.run --install
 
 echo "network setting"
 grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
