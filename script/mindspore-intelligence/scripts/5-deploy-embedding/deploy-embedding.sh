@@ -45,7 +45,7 @@ create_model() {
         --net=host \
         -v /home/eulercopilot/models/:/home/HwHiAiUser/model \
         swr.cn-south-1.myhuaweicloud.com/ascendhub/mis-tei:7.1.RC1-300I-Duo-aarch64 \
-        bge-m3 127.0.0.1 8080; then
+        bge-m3 0.0.0.0 11435; then
         
         echo -e "${GREEN}✅ 模型容器启动成功${NC}"
         
@@ -79,7 +79,7 @@ verify_deployment() {
     # 增强验证：通过API获取嵌入向量
     echo -e "${YELLOW}执行API测试（最多尝试${retries}次）...${NC}"
     for ((i=1; i<=retries; i++)); do
-        local http_code=$(curl -k -o /dev/null -w "%{http_code}" -X POST http://localhost:8080/v1/embeddings \
+        local http_code=$(curl -k -o /dev/null -w "%{http_code}" -X POST http://localhost:11435/v1/embeddings \
             -H "Content-Type: application/json" \
             -d '{"input": "The food was delicious and the waiter...", "model": "bge-m3", "encoding_format": "float"}' -s -m $TIMEOUT_DURATION)
 
