@@ -13,12 +13,21 @@ echo "docker preload image"
 docker load -i /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz
 docker load -i /home/eulercopilot/docker-images/mis-tei-image.tar
 
-echo "install npu drivers"
-groupadd HwHiAiUser
-useradd -g HwHiAiUser -d /home/HwHiAiUser -m HwHiAiUser -s /bin/bash
-/home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-driver_25.2.0_linux-aarch64.run --full --install-for-all
-/home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-firmware_7.7.0.6.236.run --full
-/home/eulercopilot/npu-driver/Ascend-docker-runtime_7.1.RC1_linux-aarch64.run --install
+echo "=== Install NPU Drivers ==="
+
+groupadd -f HwHiAiUser
+id HwHiAiUser &>/dev/null || useradd -g HwHiAiUser -m -d /home/HwHiAiUser -s /bin/bash HwHiAiUser
+
+DRV=/home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-driver_25.2.0_linux-aarch64.run
+FW=/home/eulercopilot/npu-driver/Ascend-hdk-310p-npu-firmware_7.7.0.6.236.run
+DOCKER=/home/eulercopilot/npu-driver/Ascend-docker-runtime_7.1.RC1_linux-aarch64.run
+
+[ -d /usr/local/Ascend/driver ] || bash $DRV --full --install-for-all
+[ -f /usr/local/Ascend/firmware/version.info ] || bash $FW --full
+[ -d /usr/local/Ascend/docker_runtime ] || bash $DOCKER --install
+
+echo "=== Done ==="
+
 
 echo "network setting"
 grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
