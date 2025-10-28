@@ -6,8 +6,8 @@ yum install -y vim unzip which initscripts coreutils findutils gawk e2fsprogs ut
 
 echo "sync files"
 mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
-ssh-keyscan 192.168.30.50 >> ~/.ssh/known_hosts
-sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.50:/home/nv/eulercopilot/ /home/eulercopilot/
+ssh-keyscan 192.168.30.60 >> ~/.ssh/known_hosts
+sshpass -p 'DELL@Sairi123' rsync -av --progress nv@192.168.30.60:/home/nv/eulercopilot/ /home/eulercopilot/
 
 echo "docker preload image"
 docker load -i /home/eulercopilot/docker-images/intelligence_boom_0.1.0-offline.tar.gz
@@ -23,7 +23,7 @@ useradd -g HwHiAiUser -d /home/HwHiAiUser -m HwHiAiUser -s /bin/bash
 echo "network setting"
 grep -q "BOOTPROTO=dhcp" /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
 sed -i '/BOOTPROTO=dhcp/s/dhcp/static/' /etc/sysconfig/network-scripts/ifcfg-enp125s0f0 && \
-echo -e "IPADDR=192.168.30.56\nNETMASK=255.255.255.0\nGATEWAY=192.168.30.1\nDNS1=114.114.114.114\nDNS2=8.8.8.8" >> /etc/sysconfig/network-scripts/ifcfg-enp125s0f0
+echo -e "IPADDR=192.168.30.53\nNETMASK=255.255.255.0\nGATEWAY=192.168.30.1\nDNS1=114.114.114.114\nDNS2=8.8.8.8" >> /etc/sysconfig/network-scripts/ifcfg-enp125s0f0
 
 echo "install oedp"
 yum localinstall -y /home/eulercopilot/tools/oedp-1.0.1-1.oe2503.aarch64.rpm
